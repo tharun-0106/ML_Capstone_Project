@@ -1,4 +1,4 @@
-# 🚀 ML Capstone Studio: End-to-End Machine Learning platform
+# 🚀 ML Capstone Studio: End-to-End Machine Learning Platform
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue?style=for-the-badge&logo=render)](https://ml-capstone-studio.onrender.com)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
@@ -115,15 +115,17 @@ All models evaluate on an identical stratified 80/20 train/test split (`random_s
 
 ### 3. Clustering Track ($k = 10$)
 
-Clustering evaluated across intrinsic validation metrics (Silhouette, Davies-Bouldin, Calinski-Harabasz) and external validation against ground-truth digits (ARI, NMI):
+Pipeline: standardise → PCA (50 components) → spectral embedding of a 15-nearest-neighbour graph (8 components, unit-length rows) → cluster. The embedding settings were chosen by a label-free grid search (mean silhouette across all algorithms). Intrinsic metrics (Silhouette, Davies-Bouldin, Calinski-Harabasz) are computed in the space the models were fitted in; ARI and NMI compare clusters with the true digits after fitting:
 
 | Algorithm / Linkage | Silhouette Score $\uparrow$ | Davies-Bouldin $\downarrow$ | Calinski-Harabasz $\uparrow$ | Adjusted Rand Index (ARI) | Normalized Mutual Info (NMI) |
 |:---|---:|---:|---:|---:|---:|
-| **Agglomerative (Ward)** | **0.1286** | 2.2943 | 139.36 | **0.9026** | **0.9116** |
-| **K-Means** | **0.1325** | **2.2376** | **145.29** | **0.8376** | **0.8569** |
-| Agglomerative (Average) | 0.0888 | 1.5535 | 61.04 | 0.3095 | 0.5774 |
-| Agglomerative (Complete) | 0.0660 | 2.5599 | 86.94 | 0.2962 | 0.4914 |
-| Agglomerative (Single) | -0.0160 | 0.8118 | 1.56 | 0.0000 | 0.0089 |
+| **K-Means** | **0.8487** | **0.2428** | **5665.70** | **0.9352** | **0.9326** |
+| Agglomerative (Average) | 0.8448 | 0.2466 | 5326.68 | 0.9317 | 0.9319 |
+| Agglomerative (Ward) | 0.8403 | 0.2608 | 5056.91 | 0.9256 | 0.9285 |
+| Agglomerative (Complete) | 0.7253 | 0.8598 | 1461.00 | 0.8143 | 0.8833 |
+| Agglomerative (Single) | 0.2119 | 1.1324 | 226.40 | 0.5401 | 0.7614 |
+
+Clustering the 649 scaled features directly (the earlier version) gave silhouettes of −0.016 to 0.133 and ARI of 0.00 to 0.90; single linkage put 1,991 of 2,000 digits in one cluster.
 
 ---
 
