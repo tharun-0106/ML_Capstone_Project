@@ -1,15 +1,3 @@
----
-title: ML Capstone Studio - Regression, Classification & Clustering
-emoji: 🚀
-colorFrom: indigo
-colorTo: blue
-sdk: gradio
-sdk_version: 6.30.0
-python_version: "3.12"
-app_file: app/app.py
-pinned: false
----
-
 # 🚀 ML Capstone Studio: End-to-End Machine Learning Platform
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue?style=for-the-badge&logo=render)](https://ml-capstone-studio.onrender.com)
