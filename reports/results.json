@@ -473,5 +473,107 @@
         "Smallest cluster": 1
       }
     ]
+  },
+  "regression": {
+    "comparison": [
+      {
+        "Algorithm": "Ridge Regression",
+        "R2": 0.999939,
+        "RMSE": 0.003503,
+        "MAE": 0.001818
+      },
+      {
+        "Algorithm": "Linear Regression",
+        "R2": 0.999938,
+        "RMSE": 0.003521,
+        "MAE": 0.001836
+      },
+      {
+        "Algorithm": "Lasso Regression",
+        "R2": 0.99958,
+        "RMSE": 0.009182,
+        "MAE": 0.007456
+      },
+      {
+        "Algorithm": "Decision Tree Regressor",
+        "R2": 0.999529,
+        "RMSE": 0.009721,
+        "MAE": 0.000881
+      },
+      {
+        "Algorithm": "Random Forest Regressor",
+        "R2": 0.999313,
+        "RMSE": 0.011741,
+        "MAE": 0.001751
+      },
+      {
+        "Algorithm": "Gradient Boosting Regressor",
+        "R2": 0.999182,
+        "RMSE": 0.01281,
+        "MAE": 0.002605
+      },
+      {
+        "Algorithm": "Polynomial Regression",
+        "R2": 0.98291,
+        "RMSE": 0.058547,
+        "MAE": 0.013211
+      },
+      {
+        "Algorithm": "Support Vector Regressor",
+        "R2": 0.883963,
+        "RMSE": 0.152556,
+        "MAE": 0.096896
+      },
+      {
+        "Algorithm": "K-Nearest Neighbors Regressor",
+        "R2": 0.39448,
+        "RMSE": 0.348494,
+        "MAE": 0.268156
+      },
+      {
+        "Algorithm": "ElasticNet Regression",
+        "R2": -0.000385,
+        "RMSE": 0.447935,
+        "MAE": 0.363756
+      }
+    ],
+    "top2_cv": {
+      "Ridge Regression": {
+        "mean_cv_r2": 0.9979,
+        "std_cv_r2": 0.0018,
+        "folds": [
+          0.9999,
+          0.9982,
+          0.996,
+          0.9956,
+          0.9999
+        ]
+      },
+      "Linear Regression": {
+        "mean_cv_r2": 0.9979,
+        "std_cv_r2": 0.0018,
+        "folds": [
+          0.9999,
+          0.9982,
+          0.996,
+          0.9956,
+          0.9999
+        ]
+      }
+    },
+    "tuning": [
+      {
+        "Model": "Random Forest Regressor",
+        "Best Params": "{'max_depth': 5, 'n_estimators': 50}",
+        "Tuned R2": 0.9995
+      },
+      {
+        "Model": "Gradient Boosting Regressor",
+        "Best Params": "{'learning_rate': 0.05, 'n_estimators': 100}",
+        "Tuned R2": 0.9999
+      }
+    ],
+    "best_model": "Ridge Regression",
+    "best_r2": 0.999939
   }
 }

@@ -5,6 +5,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 MFEAT_DIR = DATA_DIR / "mfeat"
 CLASSIFICATION_CSV = DATA_DIR / "train.csv"
+REGRESSION_CSV = DATA_DIR / "flavors_of_cacao.csv"
 MODELS_DIR = ROOT / "models"
 REPORTS_DIR = ROOT / "reports"
 FIG_DIR = REPORTS_DIR / "figures"

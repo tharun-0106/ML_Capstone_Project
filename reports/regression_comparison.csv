@@ -1,0 +1,11 @@
+Rank,Algorithm,R2,RMSE,MAE
+1,Ridge Regression,0.999939,0.003503,0.001818
+2,Linear Regression,0.999938,0.003521,0.001836
+3,Lasso Regression,0.99958,0.009182,0.007456
+4,Decision Tree Regressor,0.999529,0.009721,0.000881
+5,Random Forest Regressor,0.999313,0.011741,0.001751
+6,Gradient Boosting Regressor,0.999182,0.01281,0.002605
+7,Polynomial Regression,0.98291,0.058547,0.013211
+8,Support Vector Regressor,0.883963,0.152556,0.096896
+9,K-Nearest Neighbors Regressor,0.39448,0.348494,0.268156
+10,ElasticNet Regression,-0.000385,0.447935,0.363756
