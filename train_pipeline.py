@@ -102,8 +102,12 @@ def run_clustering(do_tsne=True):
     X_raw, y, _ = dl.load_mfeat()
     X, scaler = clu.scale(X_raw)              # labels y are NOT used below until "post-hoc"
 
+    # Dimensionality reduction: PCA(50) -> SpectralEmbedding(8, 15) -> unit-length rows (Ng-Jordan-Weiss)
+    print("Embedding data via PCA(50) -> SpectralEmbedding(8, 15) -> normalize ...")
+    Z = clu.embed(X, 8, 15)
+
     # 1. Elbow method for K-Means
-    elbow = clu.elbow_analysis(X)
+    elbow = clu.elbow_analysis(Z)
     elbow.to_csv(C.REPORTS_DIR / "kmeans_elbow.csv", index=False)
     k_elbow = clu.find_elbow(elbow["k"], elbow["inertia"])
     k_sil = int(elbow.loc[elbow["silhouette"].idxmax(), "k"])
@@ -114,24 +118,24 @@ def run_clustering(do_tsne=True):
     # Sensitivity: how do the metrics move for the candidate k values?
     sens = []
     for kk in sorted(set(C.K_SENSITIVITY + [k_elbow, k_sil, k])):
-        lab_km = clu.fit_kmeans(X, kk).labels_
-        lab_ag = clu.fit_agglomerative(X, kk, "ward").labels_
+        lab_km = clu.fit_kmeans(Z, kk).labels_
+        lab_ag = clu.fit_agglomerative(Z, kk, "ward").labels_
         for algo, lab in (("K-Means", lab_km), ("Agglomerative (ward)", lab_ag)):
-            sens.append({"k": kk, "Algorithm": algo, **clu.internal_metrics(X, lab),
+            sens.append({"k": kk, "Algorithm": algo, **clu.internal_metrics(Z, lab),
                          **clu.external_validation(y, lab)})   # ARI/NMI: post-hoc only
     sens = pd.DataFrame(sens)
     sens.to_csv(C.REPORTS_DIR / "k_sensitivity.csv", index=False)
     print(sens.round(4).to_string(index=False))
 
     # 2. K-Means
-    km = clu.fit_kmeans(X, k)
+    km = clu.fit_kmeans(Z, k)
 
     # 3. Agglomerative: compare linkages, draw dendrogram
-    link_table, agg_models = clu.compare_linkages(X, k)
+    link_table, agg_models = clu.compare_linkages(Z, k)
     link_table.to_csv(C.REPORTS_DIR / "agglomerative_linkages.csv", index=False)
     print(link_table.round(4).to_string(index=False))
     for method in ["ward", "complete", "average"]:
-        _save(viz.dendrogram_plot(clu.linkage_matrix(X, method), k, method),
+        _save(viz.dendrogram_plot(clu.linkage_matrix(Z, method), k, method),
               f"clu_dendrogram_{method}.png")
     best_link = "ward"   # see README: highest Silhouette/CH among balanced linkages
     agg = agg_models[best_link]
@@ -139,7 +143,7 @@ def run_clustering(do_tsne=True):
     # 4. Internal metrics for every algorithm
     all_labels = {"K-Means": km.labels_,
                   **{f"Agglomerative ({lk})": m.labels_ for lk, m in agg_models.items()}}
-    metrics = pd.DataFrame([{"Algorithm": n, **clu.internal_metrics(X, lab)}
+    metrics = pd.DataFrame([{"Algorithm": n, **clu.internal_metrics(Z, lab)}
                             for n, lab in all_labels.items()])
 
     # 5. Post-hoc validation against true digits (never used in fitting)
@@ -158,7 +162,7 @@ def run_clustering(do_tsne=True):
               f"clu_contingency_{slug}.png")
 
     # 6. Visualisation: PCA (mandatory) and t-SNE (encouraged)
-    pca_xy, pca = clu.pca_2d(X)
+    pca_xy, pca = clu.pca_2d(Z)
     print(f"PCA 2D explained variance: {pca.explained_variance_ratio_.sum():.3f}")
     _save(viz.scatter_grid(pca_xy, all_labels, "PCA", "PCA (2 components) - every algorithm"),
           "clu_pca_all.png")
@@ -173,11 +177,14 @@ def run_clustering(do_tsne=True):
                                          "Ground truth (reference)": y}, "t-SNE",
                                "t-SNE projection"), "clu_tsne.png")
 
+    from sklearn.neighbors import KNeighborsRegressor
+    embed_projector = KNeighborsRegressor(n_neighbors=5, weights="distance").fit(X, Z)
+
     # 7. Persist everything the app needs
     joblib.dump({
-        "scaler": scaler, "kmeans": km, "k": k, "k_silhouette": k_sil,
+        "scaler": scaler, "embed_projector": embed_projector, "kmeans": km, "k": k, "k_silhouette": k_sil,
         "agg_labels": {lk: m.labels_ for lk, m in agg_models.items()},
-        "agg_centroids": {lk: clu.centroids_from_labels(X, m.labels_)
+        "agg_centroids": {lk: clu.centroids_from_labels(Z, m.labels_)
                           for lk, m in agg_models.items()},
         "best_linkage": best_link, "pca": pca, "pca_xy": pca_xy, "tsne_xy": tsne_xy,
         "elbow": elbow, "metrics": metrics, "linkage_table": link_table, "y_true": y,

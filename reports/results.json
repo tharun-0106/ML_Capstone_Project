@@ -337,139 +337,139 @@
     }
   },
   "clustering": {
-    "k_auto_knee": 6,
-    "k_best_silhouette": 9,
+    "k_auto_knee": 9,
+    "k_best_silhouette": 10,
     "k_used": 10,
     "k_sensitivity": [
       {
         "k": 6,
         "Algorithm": "K-Means",
-        "Silhouette": 0.1358,
-        "Davies-Bouldin": 2.2272,
-        "Calinski-Harabasz": 180.3663,
-        "ARI": 0.533,
-        "NMI": 0.6846
+        "Silhouette": 0.5502,
+        "Davies-Bouldin": 1.1223,
+        "Calinski-Harabasz": 627.9616,
+        "ARI": 0.6412,
+        "NMI": 0.8086
       },
       {
         "k": 6,
         "Algorithm": "Agglomerative (ward)",
-        "Silhouette": 0.1266,
-        "Davies-Bouldin": 2.2364,
-        "Calinski-Harabasz": 170.5096,
-        "ARI": 0.6121,
-        "NMI": 0.7887
+        "Silhouette": 0.5525,
+        "Davies-Bouldin": 1.096,
+        "Calinski-Harabasz": 627.1537,
+        "ARI": 0.6359,
+        "NMI": 0.8107
       },
       {
         "k": 9,
         "Algorithm": "K-Means",
-        "Silhouette": 0.1483,
-        "Davies-Bouldin": 2.2015,
-        "Calinski-Harabasz": 152.893,
-        "ARI": 0.722,
-        "NMI": 0.8
+        "Silhouette": 0.7794,
+        "Davies-Bouldin": 0.5234,
+        "Calinski-Harabasz": 2298.8732,
+        "ARI": 0.8484,
+        "NMI": 0.9069
       },
       {
         "k": 9,
         "Algorithm": "Agglomerative (ward)",
-        "Silhouette": 0.1423,
-        "Davies-Bouldin": 2.2578,
-        "Calinski-Harabasz": 146.3052,
-        "ARI": 0.8136,
-        "NMI": 0.8817
+        "Silhouette": 0.7769,
+        "Davies-Bouldin": 0.5265,
+        "Calinski-Harabasz": 2246.5618,
+        "ARI": 0.846,
+        "NMI": 0.906
       },
       {
         "k": 10,
         "Algorithm": "K-Means",
-        "Silhouette": 0.1325,
-        "Davies-Bouldin": 2.2376,
-        "Calinski-Harabasz": 145.2921,
-        "ARI": 0.8376,
-        "NMI": 0.8569
+        "Silhouette": 0.8487,
+        "Davies-Bouldin": 0.2428,
+        "Calinski-Harabasz": 5665.699,
+        "ARI": 0.9352,
+        "NMI": 0.9326
       },
       {
         "k": 10,
         "Algorithm": "Agglomerative (ward)",
-        "Silhouette": 0.1286,
-        "Davies-Bouldin": 2.2943,
-        "Calinski-Harabasz": 139.3618,
-        "ARI": 0.9026,
-        "NMI": 0.9116
+        "Silhouette": 0.8403,
+        "Davies-Bouldin": 0.2608,
+        "Calinski-Harabasz": 5056.9052,
+        "ARI": 0.9256,
+        "NMI": 0.9285
       }
     ],
-    "pca_explained_variance": 0.2482775535619866,
+    "pca_explained_variance": 0.31152987252304587,
     "metrics": [
       {
         "Algorithm": "K-Means",
-        "Silhouette": 0.1325,
-        "Davies-Bouldin": 2.2376,
-        "Calinski-Harabasz": 145.2921,
-        "ARI": 0.8376,
-        "NMI": 0.8569
+        "Silhouette": 0.8487,
+        "Davies-Bouldin": 0.2428,
+        "Calinski-Harabasz": 5665.699,
+        "ARI": 0.9352,
+        "NMI": 0.9326
       },
       {
         "Algorithm": "Agglomerative (ward)",
-        "Silhouette": 0.1286,
-        "Davies-Bouldin": 2.2943,
-        "Calinski-Harabasz": 139.3618,
-        "ARI": 0.9026,
-        "NMI": 0.9116
+        "Silhouette": 0.8403,
+        "Davies-Bouldin": 0.2608,
+        "Calinski-Harabasz": 5056.9052,
+        "ARI": 0.9256,
+        "NMI": 0.9285
       },
       {
         "Algorithm": "Agglomerative (complete)",
-        "Silhouette": 0.066,
-        "Davies-Bouldin": 2.5599,
-        "Calinski-Harabasz": 86.9448,
-        "ARI": 0.2962,
-        "NMI": 0.4914
+        "Silhouette": 0.7253,
+        "Davies-Bouldin": 0.8598,
+        "Calinski-Harabasz": 1461.0005,
+        "ARI": 0.8143,
+        "NMI": 0.8833
       },
       {
         "Algorithm": "Agglomerative (average)",
-        "Silhouette": 0.0888,
-        "Davies-Bouldin": 1.5535,
-        "Calinski-Harabasz": 61.0417,
-        "ARI": 0.3095,
-        "NMI": 0.5774
+        "Silhouette": 0.8448,
+        "Davies-Bouldin": 0.2466,
+        "Calinski-Harabasz": 5326.6728,
+        "ARI": 0.9317,
+        "NMI": 0.9319
       },
       {
         "Algorithm": "Agglomerative (single)",
-        "Silhouette": -0.016,
-        "Davies-Bouldin": 0.8118,
-        "Calinski-Harabasz": 1.5586,
-        "ARI": 0.0,
-        "NMI": 0.0089
+        "Silhouette": 0.2119,
+        "Davies-Bouldin": 1.1324,
+        "Calinski-Harabasz": 226.4003,
+        "ARI": 0.5401,
+        "NMI": 0.7614
       }
     ],
     "linkages": [
       {
         "Linkage": "ward",
-        "Silhouette": 0.1286,
-        "Davies-Bouldin": 2.2943,
-        "Calinski-Harabasz": 139.3618,
-        "Largest cluster": 234,
-        "Smallest cluster": 174
+        "Silhouette": 0.8403,
+        "Davies-Bouldin": 0.2608,
+        "Calinski-Harabasz": 5056.9052,
+        "Largest cluster": 222,
+        "Smallest cluster": 182
       },
       {
         "Linkage": "complete",
-        "Silhouette": 0.066,
-        "Davies-Bouldin": 2.5599,
-        "Calinski-Harabasz": 86.9448,
-        "Largest cluster": 483,
-        "Smallest cluster": 29
+        "Silhouette": 0.7253,
+        "Davies-Bouldin": 0.8598,
+        "Calinski-Harabasz": 1461.0005,
+        "Largest cluster": 399,
+        "Smallest cluster": 10
       },
       {
         "Linkage": "average",
-        "Silhouette": 0.0888,
-        "Davies-Bouldin": 1.5535,
-        "Calinski-Harabasz": 61.0417,
-        "Largest cluster": 968,
-        "Smallest cluster": 1
+        "Silhouette": 0.8448,
+        "Davies-Bouldin": 0.2466,
+        "Calinski-Harabasz": 5326.6728,
+        "Largest cluster": 224,
+        "Smallest cluster": 180
       },
       {
         "Linkage": "single",
-        "Silhouette": -0.016,
-        "Davies-Bouldin": 0.8118,
-        "Calinski-Harabasz": 1.5586,
-        "Largest cluster": 1991,
+        "Silhouette": 0.2119,
+        "Davies-Bouldin": 1.1324,
+        "Calinski-Harabasz": 226.4003,
+        "Largest cluster": 598,
         "Smallest cluster": 1
       }
     ]

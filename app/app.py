@@ -253,9 +253,14 @@ def assign_new_digits(file, n):
         raise gr.Error(f"Each row requires {X_RAW.shape[1]} features (all 6 mfeat feature sets), but received {X_new.shape[1]}.")
 
     Xs = CLU["scaler"].transform(X_new)
+    if "embed_projector" in CLU:
+        from sklearn.preprocessing import normalize
+        Zs = normalize(CLU["embed_projector"].predict(Xs))
+    else:
+        Zs = Xs
     lk = CLU["best_linkage"]
-    km = CLU["kmeans"].predict(Xs)
-    ag = clu.nearest_centroid(Xs, CLU["agg_centroids"][lk])
+    km = CLU["kmeans"].predict(Zs)
+    ag = clu.nearest_centroid(Zs, CLU["agg_centroids"][lk])
 
     out = pd.DataFrame({
         "Sample #": np.arange(1, len(Xs) + 1),
@@ -265,7 +270,7 @@ def assign_new_digits(file, n):
         "Likely Digit (Agglomerative)": [int(MAPPINGS["Ward"].loc[c, "Majority digit"]) for c in ag],
     })
 
-    xy = CLU["pca"].transform(Xs)
+    xy = CLU["pca"].transform(Zs)
     fig = ui.cluster_scatter(CLU["pca_xy"], CLU["kmeans"].labels_, Y_TRUE, "PCA", "Batch Digit Assignment Projection")
     import plotly.graph_objects as go
     fig.add_trace(go.Scatter(

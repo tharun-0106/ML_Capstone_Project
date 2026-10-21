@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.ipynb_checkpoints/
+data/mfeat/mfeat_cache.npz
