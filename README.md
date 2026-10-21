@@ -1,4 +1,4 @@
-# 🚀 ML Capstone Studio: End-to-End Machine Learning Platform
+# 🚀 ML Capstone Studio: End-to-End Machine Learning platform
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue?style=for-the-badge&logo=render)](https://ml-capstone-studio.onrender.com)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
