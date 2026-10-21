@@ -9,11 +9,11 @@ import pandas as pd
 from scipy.cluster.hierarchy import linkage as scipy_linkage
 from sklearn.cluster import AgglomerativeClustering, KMeans
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
+from sklearn.manifold import TSNE, SpectralEmbedding
 from sklearn.metrics import (adjusted_rand_score, calinski_harabasz_score,
                              davies_bouldin_score, normalized_mutual_info_score,
                              silhouette_score)
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, normalize
 
 from . import config as C
 
@@ -26,6 +26,41 @@ def scale(X):
     (pixel counts 0-6 vs. Karhunen-Loeve coefficients ~ +/-10 vs. morphology in the 100s)."""
     scaler = StandardScaler()
     return scaler.fit_transform(X), scaler
+
+
+def embed(X, n_components, n_neighbors, n_pca=C.EMBED_PCA):
+    """PCA to `n_pca` dims (drops noisy directions), then a spectral embedding of
+    the k-nearest-neighbour graph, then unit-length rows (Ng-Jordan-Weiss).
+    Points that are connected through their neighbours end up close together,
+    so the digit groups become compact and well separated."""
+    Xp = PCA(n_components=n_pca, random_state=RS).fit_transform(X)
+    E = SpectralEmbedding(n_components=n_components, n_neighbors=n_neighbors,
+                          random_state=RS).fit_transform(Xp)
+    return normalize(E)
+
+
+def all_labels(X, k, linkages=C.LINKAGES):
+    """K-Means plus one Agglomerative model per linkage, fitted on the same X."""
+    out = {"K-Means": fit_kmeans(X, k).labels_}
+    for lk in linkages:
+        out[f"Agglomerative ({lk})"] = fit_agglomerative(X, k, lk).labels_
+    return out
+
+
+def tune_embedding(X, k, dims=C.EMBED_DIMS, neighbors=C.EMBED_NEIGHBORS):
+    """Grid search over the embedding settings. Label-free: each setting is
+    scored by the silhouette of every algorithm in the embedded space, and the
+    setting with the highest mean silhouette wins."""
+    rows = []
+    for d in dims:
+        for nn in neighbors:
+            Z = embed(X, d, nn)
+            sil = {name: silhouette_score(Z, lab) for name, lab in all_labels(Z, k).items()}
+            rows.append({"n_components": d, "n_neighbors": nn,
+                         "mean silhouette": np.mean(list(sil.values())),
+                         "min silhouette": min(sil.values()), **sil})
+    return (pd.DataFrame(rows).sort_values("mean silhouette", ascending=False)
+            .reset_index(drop=True))
 
 
 # ---------------------------------------------------------------- K-Means
