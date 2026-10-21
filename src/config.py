@@ -27,13 +27,19 @@ MFEAT_DESC = {
     "mor": "Morphological features (6)",
 }
 K_RANGE = range(2, 16)          # range searched by the elbow method
-# The inertia curve is smooth (no sharp elbow). The marginal drop in inertia
-# falls from 3.2% (k 8->9) to 2.6% (k 9->10) and stays below ~2.7% afterwards,
-# and the dataset documentation states 10 digit classes (domain knowledge, not
-# label use). Set to None to use the automatic knee instead.
+# On the spectral-embedded data the elbow is sharp: inertia falls 61.6% from
+# k 9->10 and only ~10% per step afterwards, silhouette peaks at k = 10, and the
+# dataset documentation states 10 digit classes (domain knowledge, not label use).
 K_FINAL = 10
 K_SENSITIVITY = [6, 9, 10]      # automatic knee, best silhouette, final
 LINKAGES = ["ward", "complete", "average", "single"]
+
+# Dimensionality reduction before clustering: standardise -> PCA -> spectral
+# embedding of a k-nearest-neighbour graph -> unit-length rows. The two embedding
+# settings are picked by a label-free search (mean silhouette over all algorithms).
+EMBED_PCA = 50
+EMBED_DIMS = [8, 9, 10, 11, 12]
+EMBED_NEIGHBORS = [10, 15, 20, 30]
 
 for d in (MODELS_DIR, REPORTS_DIR, FIG_DIR):
     d.mkdir(parents=True, exist_ok=True)
