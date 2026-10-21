@@ -18,20 +18,13 @@ pinned: false
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6+-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 
 > 🌐 **Live Web Application Demo:**  
-> 👉 **[https://ml-capstone-studio.onrender.com](https://ml-capstone-studio.onrender.com)**  
-> *(Note: You can update this placeholder URL with your actual deployed Render service link)*
+> 👉 **[https://ml-capstone-studio.onrender.com](https://ml-capstone-studio.onrender.com)**
 
 ---
 
 ## 📌 Project Overview
 
-This repository houses the complete deliverables for the **Machine Learning Capstone Project (Reviews 1 & 2)**. It provides end-to-end pipelines, reproducible benchmarks, serialized models, and a sleek SaaS-style interactive web application spanning all three foundational ML paradigms:
-
-| Track | Dataset | Problem Type | Algorithms Evaluated | Best Model |
-|:---|:---|:---|:---:|:---|
-| **1. Regression** *(Review 1)* | Flavors of Cacao (`data/flavors_of_cacao.csv`) | Chocolate bar rating estimation (Continuous) | **10 Algorithms** | **Ridge / Random Forest** ($R^2 \approx 0.999$) |
-| **2. Classification** *(Review 2)* | Mobile Price Classification (`data/train.csv`) | 4-tier smartphone price band prediction (Multi-class) | **10 Algorithms** (Part A + B) | **Tuned SVC** (Linear, $C=10$) (Accuracy: **97.5%**, AUC: **0.999**) |
-| **3. Clustering** *(Review 2)* | UCI Multiple Features digits (`data/mfeat/`) | Unsupervised grouping of 2,000 handwritten digits | **K-Means & Agglomerative** (4 linkages) | **K-Means / Ward Linkage** (ARI: **0.9026**) |
+This repository houses the complete deliverables for the **Machine Learning Capstone Project (Reviews 1 & 2)**. It provides end-to-end pipelines, reproducible benchmarks, serialized models, and a sleek SaaS-style interactive web application spanning all three foundational ML paradigms: **Regression** (10 algorithms on Flavors of Cacao), **Classification** (10 algorithms Part A & B on Mobile Price), and **Clustering** (K-Means & Agglomerative on UCI Multiple Features).
 
 ---
 
@@ -212,23 +205,6 @@ Open your browser and navigate to **`http://localhost:7860`**.
 ```bash
 python train_pipeline.py
 ```
-
----
-
-## ☁️ Deployment Guide (Render)
-
-This project includes a native `render.yaml` Blueprint for zero-configuration cloud deployment:
-
-1. Push your repository to **GitHub**.
-2. Sign in to [Render Dashboard](https://dashboard.render.com).
-3. Click **New +** → **Blueprint** (or **Web Service**).
-4. Connect your GitHub repository `ML_Capstone_Project`.
-5. Enter a Blueprint name (e.g. `ml-capstone-studio`).
-6. Click **Deploy Blueprint**.
-7. Once deployment finishes, your live link will be available:
-   - 🔗 **Public URL:** `https://ml-capstone-studio.onrender.com` *(or your custom Render URL)*
-
-> 💡 *Note on Render Free Tier:* Free web services spin down after 15 minutes of inactivity. Allow ~45 seconds on first request for automatic spin-up.
 
 ---
 
