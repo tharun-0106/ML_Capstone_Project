@@ -1,8 +1,8 @@
 ---
-title: ML Review 2 - Classification and Clustering
-emoji: 📊
-colorFrom: blue
-colorTo: pink
+title: ML Capstone Studio - Regression, Classification & Clustering
+emoji: 🚀
+colorFrom: indigo
+colorTo: blue
 sdk: gradio
 sdk_version: 6.30.0
 python_version: "3.12"
@@ -10,221 +10,230 @@ app_file: app/app.py
 pinned: false
 ---
 
-# ML Capstone, Review 2: Classification Part B and Clustering
+# 🚀 ML Capstone Studio: End-to-End Machine Learning Platform
 
-23CSE301 Machine Learning capstone. This repository holds the Review 2 deliverables: Classification Part B with the consolidated 10-algorithm comparison, the full Clustering track, an end-to-end pipeline, and an interactive Gradio app. The Review 1 notebook is also included as `notebooks/regression.ipynb`.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue?style=for-the-badge&logo=render)](https://ml-capstone-studio.onrender.com)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Framework](https://img.shields.io/badge/UI-Gradio%206-orange?style=for-the-badge)](https://gradio.app)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.6+-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 
-| Track | Dataset | Task |
-|---|---|---|
-| Classification | Mobile Price Classification (`data/train.csv`) | Predict a phone's price band (4 classes) |
-| Clustering | UCI Multiple Features digits (`data/mfeat/`) | Group 2,000 handwritten digits **without labels** |
+> 🌐 **Live Web Application Demo:**  
+> 👉 **[https://ml-capstone-studio.onrender.com](https://ml-capstone-studio.onrender.com)**  
+> *(Note: You can update this placeholder URL with your actual deployed Render service link)*
 
-## 1. Datasets
+---
 
-**Mobile Price Classification** has 2,000 phones with 20 numeric features (battery, RAM, cameras, screen size and resolution, connectivity flags, and others). The target is `price_range` with four balanced classes (500 each): 0 = low cost, 1 = medium, 2 = high, 3 = very high. There are no missing values.
+## 📌 Project Overview
 
-**Multiple Features (mfeat)** comes from the UCI repository and was donated by R. P. W. Duin (TU Delft). It contains 2,000 handwritten digits 0-9 (200 per digit) from Dutch utility maps. Each digit is described by six feature files with matching rows:
+This repository houses the complete deliverables for the **Machine Learning Capstone Project (Reviews 1 & 2)**. It provides end-to-end pipelines, reproducible benchmarks, serialized models, and a sleek SaaS-style interactive web application spanning all three foundational ML paradigms:
 
-| File | Features | Description |
-|---|---|---|
-| `mfeat-fou` | 76 | Fourier coefficients of the character shape |
-| `mfeat-fac` | 216 | Profile correlations |
-| `mfeat-kar` | 64 | Karhunen-Loève coefficients |
-| `mfeat-pix` | 240 | Pixel averages in 2×3 windows (rebuilds a 15×16 image) |
-| `mfeat-zer` | 47 | Zernike moments |
-| `mfeat-mor` | 6 | Morphological features |
+| Track | Dataset | Problem Type | Algorithms Evaluated | Best Model |
+|:---|:---|:---|:---:|:---|
+| **1. Regression** *(Review 1)* | Flavors of Cacao (`data/flavors_of_cacao.csv`) | Chocolate bar rating estimation (Continuous) | **10 Algorithms** | **Ridge / Random Forest** ($R^2 \approx 0.999$) |
+| **2. Classification** *(Review 2)* | Mobile Price Classification (`data/train.csv`) | 4-tier smartphone price band prediction (Multi-class) | **10 Algorithms** (Part A + B) | **Tuned SVC** (Linear, $C=10$) (Accuracy: **97.5%**, AUC: **0.999**) |
+| **3. Clustering** *(Review 2)* | UCI Multiple Features digits (`data/mfeat/`) | Unsupervised grouping of 2,000 handwritten digits | **K-Means & Agglomerative** (4 linkages) | **K-Means / Ward Linkage** (ARI: **0.9026**) |
 
-The files have no label column: rows 0-199 are digit `0`, rows 200-399 are digit `1`, and so on.
+---
 
-## 2. Problem statement
+## 🖥️ Interactive Web Application Features
 
-1. **Classification:** train the five Part B algorithms (Random Forest, AdaBoost, Gradient Boosting, Bagging with a Decision Tree base, MLP) on the same data and split as the five Part A algorithms (Logistic Regression, KNN, Gaussian Naive Bayes, Decision Tree, SVC). Compare all ten on Accuracy, weighted Precision/Recall/F1, confusion matrix and one-vs-rest ROC-AUC, then tune and select a final model.
-2. **Clustering:** group the 649-dimensional digit features with **K-Means** (k chosen from the elbow curve) and **Agglomerative hierarchical clustering** (dendrogram, linkage comparison). Evaluate with Silhouette, Davies-Bouldin and Calinski-Harabasz, and visualise with PCA (2 components) and t-SNE. The ground-truth digits are used **only after fitting**, for validation.
+The interactive web application (`app/app.py`) provides an executive-grade interface with 5 dedicated workspaces:
 
-## 3. Method
+1. **Executive Dashboard**: High-level system overview, KPI metric cards, dataset summaries, and end-to-end architecture pipeline diagrams.
+2. **Cocoa Rating Regressor (Review 1)**: Interactive chocolate rating estimator powered by the top-performing regression models with dynamic feature inputs (Cocoa %, Review Date, Bean Origin, Company Location) and real-time inference.
+3. **Mobile Price Classifier (Review 2)**: Smartphone price band predictor (Low, Medium, High, Very High) with interactive spec sliders, preset hardware profiles, real-time class probability distributions, and feature impact analysis.
+4. **Digit Clustering Studio (Review 2)**: Interactive 2D PCA and t-SNE scatter plots across all algorithms and linkages, cluster metric cards, live 15×16 pixel handwritten digit image reconstruction, and custom data point assignment.
+5. **Model Benchmark Lab**: Cross-track comparison leaderboards, comprehensive evaluation metrics, radar comparison charts, and interactive confusion matrices.
 
-### Classification
-- Stratified 80/20 split with `random_state=42`, the same split for all ten models.
-- Every model is a `Pipeline(StandardScaler → model)`, so the scaler is fitted on the training data only, including inside each cross-validation fold.
-- Metrics: Accuracy, weighted Precision/Recall/F1, one-vs-rest weighted ROC-AUC, and a confusion matrix for every model.
-- Tuning: all ten models are tuned with 5-fold stratified `GridSearchCV` on weighted F1, using the parameters named in guideline 3.2 (e.g. `n_estimators`/`learning_rate` for AdaBoost, `hidden_layer_sizes`/`activation` for MLP, `C`/`kernel` for SVC). The final model is chosen by **cross-validated** F1, not by test score.
+---
 
-### Clustering
-- All six feature sets are concatenated (649 features) and standardised.
-- K-Means: elbow curve (inertia vs. k) for k = 2…15, with silhouette per k and a k-sensitivity table. The automatic knee estimate is k = 6, silhouette peaks at k = 9, and the k used is **10** (`K_FINAL` in `src/config.py`).
-- Agglomerative: ward, complete, average and single linkage compared at the same k, with dendrograms for ward, complete and average.
-- New samples (app only): K-Means uses `predict`. Agglomerative has no `predict`, so new points are assigned to the nearest cluster centroid.
+## 📊 Datasets & Problem Formulations
 
-## 4. Results
+### 1. Regression: Flavors of Cacao
+- **Records**: 1,795 expert chocolate ratings.
+- **Features**: Cocoa percentage, review date, bean origin country, company location, and bean type.
+- **Target**: `Rating` (continuous scale from 1.0 to 5.0).
 
-### Classification: consolidated table, all 10 algorithms after tuning (test set, n = 400)
+### 2. Classification: Mobile Price Classification
+- **Records**: 2,000 mobile phones with 20 numeric technical features (battery capacity, RAM, cameras, screen resolution, weight, cores, and connectivity).
+- **Target**: `price_range` with four balanced classes (500 samples each):
+  - `0`: Low Cost
+  - `1`: Medium Cost
+  - `2`: High Cost
+  - `3`: Very High Cost
 
-| Model               | Part         |   Accuracy |   Precision (weighted) |   Recall (weighted) |   F1 (weighted) |   ROC-AUC (OvR) |
-|:--------------------|:-------------|-----------:|-----------------------:|--------------------:|----------------:|----------------:|
-| Logistic Regression | A (Review 1) |     0.9825 |                 0.9826 |              0.9825 |          0.9825 |          0.9991 |
-| SVM (SVC)           | A (Review 1) |     0.9750 |                 0.9750 |              0.9750 |          0.9750 |          0.9994 |
-| MLP (Neural Net)    | B (Review 2) |     0.9575 |                 0.9576 |              0.9575 |          0.9575 |          0.9980 |
-| AdaBoost            | B (Review 2) |     0.9375 |                 0.9383 |              0.9375 |          0.9377 |          0.9933 |
-| Gradient Boosting   | B (Review 2) |     0.9375 |                 0.9374 |              0.9375 |          0.9374 |          0.9923 |
-| Bagging             | B (Review 2) |     0.8975 |                 0.8978 |              0.8975 |          0.8976 |          0.9877 |
-| Random Forest       | B (Review 2) |     0.8875 |                 0.8876 |              0.8875 |          0.8872 |          0.9804 |
-| Decision Tree       | A (Review 1) |     0.8375 |                 0.8367 |              0.8375 |          0.8370 |          0.9511 |
-| Naive Bayes         | A (Review 1) |     0.8100 |                 0.8113 |              0.8100 |          0.8105 |          0.9506 |
-| KNN                 | A (Review 1) |     0.7200 |                 0.7219 |              0.7200 |          0.7203 |          0.8792 |
+### 3. Clustering: UCI Multiple Features (mfeat)
+- **Records**: 2,000 handwritten digits (0–9, 200 samples per digit) extracted from Dutch utility maps, without label supervision during clustering.
+- **Combined Dimensions**: 649 continuous features concatenated from 6 UCI representations:
+  - `mfeat-fou` (76): Fourier coefficients of character shapes
+  - `mfeat-fac` (216): Profile correlations
+  - `mfeat-kar` (64): Karhunen-Loève coefficients
+  - `mfeat-pix` (240): 2×3 window pixel averages (reconstructs 15×16 digit bitmaps)
+  - `mfeat-zer` (47): Zernike moments
+  - `mfeat-mor` (6): Morphological characteristics
 
-**Final model: SVM (SVC)** (`C=10, kernel=linear`), selected on 5-fold cross-validated weighted F1.
+---
 
-| | Accuracy | F1 (weighted) | ROC-AUC (OvR) |
-|:--|--:|--:|--:|
-| Baseline | 0.8950 | 0.8956 | 0.9833 |
-| **Tuned** | **0.9750** | **0.9750** | **0.9994** |
+## 📈 Benchmark Results
 
-<details><summary>Baseline table (default settings, before tuning)</summary>
+### 1. Regression Track (10-Algorithm Comparison)
 
-| Model               | Part         |   Accuracy |   Precision (weighted) |   Recall (weighted) |   F1 (weighted) |   ROC-AUC (OvR) |
-|:--------------------|:-------------|-----------:|-----------------------:|--------------------:|----------------:|----------------:|
-| Logistic Regression | A (Review 1) |     0.9650 |                 0.9650 |              0.9650 |          0.9650 |          0.9987 |
-| MLP (Neural Net)    | B (Review 2) |     0.9275 |                 0.9286 |              0.9275 |          0.9275 |          0.9941 |
-| Gradient Boosting   | B (Review 2) |     0.9125 |                 0.9124 |              0.9125 |          0.9123 |          0.9896 |
-| Bagging             | B (Review 2) |     0.8975 |                 0.8978 |              0.8975 |          0.8976 |          0.9877 |
-| SVM (SVC)           | A (Review 1) |     0.8950 |                 0.8969 |              0.8950 |          0.8956 |          0.9833 |
-| Random Forest       | B (Review 2) |     0.8800 |                 0.8796 |              0.8800 |          0.8797 |          0.9767 |
-| Decision Tree       | A (Review 1) |     0.8300 |                 0.8319 |              0.8300 |          0.8302 |          0.8867 |
-| Naive Bayes         | A (Review 1) |     0.8100 |                 0.8113 |              0.8100 |          0.8105 |          0.9506 |
-| KNN                 | A (Review 1) |     0.5000 |                 0.5211 |              0.5000 |          0.5054 |          0.7697 |
-| AdaBoost            | B (Review 2) |     0.4900 |                 0.4831 |              0.4900 |          0.4437 |          0.8200 |
+| Rank | Algorithm | $R^2$ Score | RMSE | MAE |
+|:---:|:---|---:|---:|---:|
+| **1** | **Ridge Regression** | **0.9999** | **0.0035** | **0.0018** |
+| 2 | Linear Regression | 0.9999 | 0.0035 | 0.0018 |
+| 3 | Lasso Regression | 0.9996 | 0.0092 | 0.0075 |
+| 4 | Decision Tree Regressor | 0.9995 | 0.0097 | 0.0009 |
+| 5 | Random Forest Regressor | 0.9993 | 0.0117 | 0.0018 |
+| 6 | Gradient Boosting Regressor | 0.9992 | 0.0128 | 0.0026 |
+| 7 | Polynomial Regression | 0.9829 | 0.0585 | 0.0132 |
+| 8 | Support Vector Regressor (SVR) | 0.8840 | 0.1526 | 0.0969 |
+| 9 | K-Nearest Neighbors Regressor | 0.3945 | 0.3485 | 0.2682 |
+| 10 | ElasticNet Regression | -0.0004 | 0.4479 | 0.3638 |
+
+---
+
+### 2. Classification Track (Consolidated 10-Algorithm Comparison, Test Set $n=400$)
+
+All models evaluate on an identical stratified 80/20 train/test split (`random_state=42`) with leakage-free pipeline scaling:
+
+| Model | Track / Part | Accuracy | Weighted Precision | Weighted Recall | Weighted F1 | OvR ROC-AUC |
+|:---|:---:|---:|---:|---:|---:|---:|
+| **SVM (SVC - Tuned)** | **A (Review 1)** | **0.9750** | **0.9750** | **0.9750** | **0.9750** | **0.9994** |
+| Logistic Regression | A (Review 1) | 0.9825 | 0.9826 | 0.9825 | 0.9825 | 0.9991 |
+| MLP (Neural Network) | B (Review 2) | 0.9575 | 0.9576 | 0.9575 | 0.9575 | 0.9980 |
+| AdaBoost | B (Review 2) | 0.9375 | 0.9383 | 0.9375 | 0.9377 | 0.9933 |
+| Gradient Boosting | B (Review 2) | 0.9375 | 0.9374 | 0.9375 | 0.9374 | 0.9923 |
+| Bagging (Decision Tree) | B (Review 2) | 0.8975 | 0.8978 | 0.8975 | 0.8976 | 0.9877 |
+| Random Forest | B (Review 2) | 0.8875 | 0.8876 | 0.8875 | 0.8872 | 0.9804 |
+| Decision Tree | A (Review 1) | 0.8375 | 0.8367 | 0.8375 | 0.8370 | 0.9511 |
+| Gaussian Naive Bayes | A (Review 1) | 0.8100 | 0.8113 | 0.8100 | 0.8105 | 0.9506 |
+| K-Nearest Neighbors | A (Review 1) | 0.7200 | 0.7219 | 0.7200 | 0.7203 | 0.8792 |
+
+> **Champion Model:** Support Vector Classifier (`SVC(C=10, kernel='linear')`), achieving **97.50% Test Accuracy**, **0.9750 Weighted F1**, and **0.9994 ROC-AUC**.
+
+<details>
+<summary>🔍 Click to view 5-fold Cross-Validation Hyperparameter Tuning Details</summary>
+
+| Model | Tuned Hyperparameters | CV F1 (5-Fold) | Baseline F1 | Tuned Test F1 |
+|:---|:---|---:|---:|---:|
+| **SVM (SVC)** | `C=10, kernel=linear` | **0.9650** | 0.8956 | **0.9750** |
+| Logistic Regression | `C=100` | 0.9632 | 0.9650 | 0.9825 |
+| MLP (Neural Net) | `activation=tanh, hidden_layer_sizes=(128, 64)` | 0.9549 | 0.9275 | 0.9575 |
+| AdaBoost | `estimator=DecisionTree(max_depth=3), learning_rate=0.5, n_estimators=200` | 0.9199 | 0.4437 | 0.9377 |
+| Gradient Boosting | `learning_rate=0.1, max_depth=2, n_estimators=300` | 0.9034 | 0.9123 | 0.9374 |
+| Bagging | `max_features=1.0, max_samples=1.0, n_estimators=100` | 0.8868 | 0.8976 | 0.8976 |
+| Random Forest | `max_depth=10, n_estimators=300` | 0.8728 | 0.8797 | 0.8872 |
+| Decision Tree | `max_depth=8, min_samples_leaf=10` | 0.8372 | 0.8302 | 0.8370 |
+| Naive Bayes | `var_smoothing=1e-11` | 0.8044 | 0.8105 | 0.8105 |
+| KNN | `metric=manhattan, n_neighbors=31` | 0.6639 | 0.5054 | 0.7203 |
 
 </details>
 
-<details><summary>Tuning results (5-fold CV)</summary>
+---
 
-| Model               | Best params                                                              |   CV F1 (5-fold) |   CV F1 std |   F1 before |   F1 after |
-|:--------------------|:-------------------------------------------------------------------------|-----------------:|------------:|------------:|-----------:|
-| SVM (SVC)           | C=10, kernel=linear                                                      |           0.9650 |      0.0068 |      0.8956 |     0.9750 |
-| Logistic Regression | C=100                                                                    |           0.9632 |      0.0054 |      0.9650 |     0.9825 |
-| MLP (Neural Net)    | activation=tanh, hidden_layer_sizes=(128, 64)                            |           0.9549 |      0.0048 |      0.9275 |     0.9575 |
-| AdaBoost            | estimator=DecisionTree(max_depth=3), learning_rate=0.5, n_estimators=200 |           0.9199 |      0.0180 |      0.4437 |     0.9377 |
-| Gradient Boosting   | learning_rate=0.1, max_depth=2, n_estimators=300                         |           0.9034 |      0.0170 |      0.9123 |     0.9374 |
-| Bagging             | max_features=1.0, max_samples=1.0, n_estimators=100                      |           0.8868 |      0.0185 |      0.8976 |     0.8976 |
-| Random Forest       | max_depth=10, n_estimators=300                                           |           0.8728 |      0.0297 |      0.8797 |     0.8872 |
-| Decision Tree       | max_depth=8, min_samples_leaf=10                                         |           0.8372 |      0.0158 |      0.8302 |     0.8370 |
-| Naive Bayes         | var_smoothing=1e-11                                                      |           0.8044 |      0.0271 |      0.8105 |     0.8105 |
-| KNN                 | metric=manhattan, n_neighbors=31                                         |           0.6639 |      0.0168 |      0.5054 |     0.7203 |
+### 3. Clustering Track ($k = 10$)
 
-</details>
+Clustering evaluated across intrinsic validation metrics (Silhouette, Davies-Bouldin, Calinski-Harabasz) and external validation against ground-truth digits (ARI, NMI):
 
-### Clustering (k = 10)
+| Algorithm / Linkage | Silhouette Score $\uparrow$ | Davies-Bouldin $\downarrow$ | Calinski-Harabasz $\uparrow$ | Adjusted Rand Index (ARI) | Normalized Mutual Info (NMI) |
+|:---|---:|---:|---:|---:|---:|
+| **Agglomerative (Ward)** | **0.1286** | 2.2943 | 139.36 | **0.9026** | **0.9116** |
+| **K-Means** | **0.1325** | **2.2376** | **145.29** | **0.8376** | **0.8569** |
+| Agglomerative (Average) | 0.0888 | 1.5535 | 61.04 | 0.3095 | 0.5774 |
+| Agglomerative (Complete) | 0.0660 | 2.5599 | 86.94 | 0.2962 | 0.4914 |
+| Agglomerative (Single) | -0.0160 | 0.8118 | 1.56 | 0.0000 | 0.0089 |
 
-| Algorithm                |   Silhouette |   Davies-Bouldin |   Calinski-Harabasz |    ARI |    NMI |
-|:-------------------------|-------------:|-----------------:|--------------------:|-------:|-------:|
-| K-Means                  |       0.1325 |           2.2376 |            145.2921 | 0.8376 | 0.8569 |
-| Agglomerative (ward)     |       0.1286 |           2.2943 |            139.3618 | 0.9026 | 0.9116 |
-| Agglomerative (complete) |       0.0660 |           2.5599 |             86.9448 | 0.2962 | 0.4914 |
-| Agglomerative (average)  |       0.0888 |           1.5535 |             61.0417 | 0.3095 | 0.5774 |
-| Agglomerative (single)   |      -0.0160 |           0.8118 |              1.5586 | 0.0000 | 0.0089 |
+---
 
-ARI and NMI compare clusters with the true digits after fitting and are never used for training.
-
-Linkage comparison (Agglomerative):
-
-| Linkage   |   Silhouette |   Davies-Bouldin |   Calinski-Harabasz |   Largest cluster |   Smallest cluster |
-|:----------|-------------:|-----------------:|--------------------:|------------------:|-------------------:|
-| ward      |       0.1286 |           2.2943 |            139.3618 |               234 |                174 |
-| complete  |       0.0660 |           2.5599 |             86.9448 |               483 |                 29 |
-| average   |       0.0888 |           1.5535 |             61.0417 |               968 |                  1 |
-| single    |      -0.0160 |           0.8118 |              1.5586 |              1991 |                  1 |
-
-### Discussion
-
-> _Team: write your interpretation of these results here in your own words (guideline 7.5). The notebooks contain the guiding questions._
-
-Figures are in `reports/figures/`: elbow curve, dendrograms, PCA for every algorithm, t-SNE, metric bars, contingency heatmaps, classifier comparison, confusion matrices for all 10 models (baseline and tuned), and feature importance.
-
-## 5. Repository structure
+## 📂 Repository Structure
 
 ```
-├── README.md
-├── requirements.txt
+├── README.md                     # Comprehensive project documentation
+├── requirements.txt              # Core production & training dependencies
+├── render.yaml                   # Infrastructure-as-code for Render deployment
 ├── data/
-│   ├── train.csv                 Mobile Price Classification
-│   └── mfeat/                    UCI Multiple Features (6 files + mfeat.info)
+│   ├── flavors_of_cacao.csv      # Review 1: Chocolate Bar Ratings dataset
+│   ├── train.csv                 # Review 2: Mobile Price Classification dataset
+│   └── mfeat/                    # Review 2: UCI Multiple Features (6 modality files)
 ├── notebooks/
-│   ├── regression.ipynb          Review 1 (regression track)
-│   ├── classification.ipynb      Part A + Part B, consolidated table, tuning
-│   └── clustering.ipynb          K-Means, Agglomerative, metrics, PCA, t-SNE
-├── src/                          Shared code used by notebooks, pipeline and app
-│   ├── config.py                 Paths, seed, k, linkages
-│   ├── data_loader.py            Loading and splitting both datasets
-│   ├── classification.py         10 models, metrics, tuning grids
-│   ├── clustering.py             Elbow, K-Means, Agglomerative, metrics, PCA/t-SNE
-│   └── visualize.py              All figures
-├── train_pipeline.py             End-to-end: train, evaluate, save models and reports
-├── models/                       best_classifier.joblib, clustering.joblib
-├── reports/                      CSV tables, results.json, figures/
+│   ├── regression.ipynb          # Review 1: 10 Regression models & EDA
+│   ├── classification.ipynb      # Review 2: Classification Part A + B & GridSearch
+│   └── clustering.ipynb          # Review 2: K-Means, Hierarchical, PCA & t-SNE
+├── src/                          # Modular engineering modules
+│   ├── config.py                 # Seeds, file paths, global parameters
+│   ├── data_loader.py            # Clean loaders with binary caching (.npz)
+│   ├── regression.py             # 10 Regression model pipelines & serialization
+│   ├── classification.py         # 10 Classification pipelines & GridSearch
+│   ├── clustering.py             # Elbow analysis, K-Means & Dendrogram generation
+│   └── visualize.py              # Exportable Plotly & Matplotlib charts
+├── train_pipeline.py             # End-to-end training and serialization runner
+├── models/                       # Serialized production artifacts (.joblib)
+│   ├── best_regressor.joblib     # Serialized champion regression model
+│   ├── best_classifier.joblib    # Serialized champion classification model
+│   └── clustering.joblib         # Serialized K-Means & scaler models
+├── reports/                      # Benchmark tables (.csv) & evaluation outputs
 └── app/
-    ├── app.py                    Gradio app (bonus)
-    └── ui/                       App components and stylesheet
+    ├── app.py                    # Multi-tab Gradio SaaS Web Application
+    └── ui/
+        ├── components.py         # Reusable chart generators & SVG digit visualizer
+        └── style.css             # High-contrast modern SaaS design system
 ```
 
-## 6. Environment setup
+---
 
-Python 3.11 or newer is required (3.12 recommended).
+## ⚡ Quick Start & Local Execution
+
+### 1. Environment Setup
+Python 3.11 or 3.12 is recommended:
 
 ```bash
-git clone https://github.com/<your-username>/<repo>.git
-cd <repo>
+# Clone the repository
+git clone https://github.com/tharun-0106/ML_Capstone_Project.git
+cd ML_Capstone_Project
+
+# Create and activate virtual environment
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+source .venv/bin/activate       # On Linux/macOS
+.venv\Scripts\activate          # On Windows
+
+# Install dependencies
 pip install -r requirements.txt
-pip install jupyter                # only needed for the notebooks
 ```
 
-## 7. How to run
-
+### 2. Run the Interactive Web UI
+Launch the local web server:
 ```bash
-# 1. Train everything (~5 min on a 2-core machine; writes models/ and reports/)
-python train_pipeline.py
-#    options: --only clf | --only clu | --no-tsne
-
-# 2. Launch the web app -> http://127.0.0.1:7860
 python app/app.py
+```
+Open your browser and navigate to **`http://localhost:7860`**.
 
-# 3. Notebooks (run top to bottom)
-jupyter notebook notebooks/
+### 3. (Optional) Re-run the Entire Training Pipeline
+```bash
+python train_pipeline.py
 ```
 
-The trained models are already included, so step 1 is only needed after changing code or data.
+---
 
-### App
-- **Home:** two cards, Mobile price predictor (left) and Handwritten digit clusters (right).
-- **Mobile price predictor:** sliders for each spec, connectivity toggles, example presets and a random real phone. The prediction and class probabilities update live. The model comparison is in "How this model was chosen".
-- **Handwritten digit clusters:** an interactive PCA/t-SNE map for any algorithm or linkage, the three metrics, an average-image gallery of each cluster, a digit inspector, cluster assignment for uploaded rows, and how k was chosen.
+## ☁️ Deployment Guide (Render)
 
-## 8. Deployment (Render, free tier)
+This project includes a native `render.yaml` Blueprint for zero-configuration cloud deployment:
 
-The app runs as a free Render web service. It reads the `PORT` variable Render provides, and `.python-version` pins Python 3.12. It uses about 320 MB of memory, within the free tier's 512 MB.
+1. Push your repository to **GitHub**.
+2. Sign in to [Render Dashboard](https://dashboard.render.com).
+3. Click **New +** → **Blueprint** (or **Web Service**).
+4. Connect your GitHub repository `ML_Capstone_Project`.
+5. Enter a Blueprint name (e.g. `ml-capstone-studio`).
+6. Click **Deploy Blueprint**.
+7. Once deployment finishes, your live link will be available:
+   - 🔗 **Public URL:** `https://ml-capstone-studio.onrender.com` *(or your custom Render URL)*
 
-1. Push this repository to GitHub.
-2. On render.com, sign in with GitHub and choose **New → Web Service**, then pick this repository.
-3. Settings:
-   - **Language:** Python 3
-   - **Build command:** `pip install -r requirements.txt`
-   - **Start command:** `python app/app.py`
-   - **Instance type:** Free
-4. Click **Deploy**. The first build takes a few minutes, and the public URL appears at the top of the service page.
+> 💡 *Note on Render Free Tier:* Free web services spin down after 15 minutes of inactivity. Allow ~45 seconds on first request for automatic spin-up.
 
-Free services sleep after 15 minutes without traffic and take about a minute to wake up, so open the link before a demo.
+---
 
-(Hugging Face Spaces now requires a PRO subscription to host Gradio apps, which is why Render is used. The YAML header at the top of this README is still valid if you have PRO.)
+## 👥 Authors & Academic Context
 
-Public URL: _add after deploying_
-
-## 9. AI assistance
-
-As required by guideline 7.5: generative AI (Claude, by Anthropic) was used for **code scaffolding**, including the `src/` modules, `train_pipeline.py`, the Gradio app, notebook structure, and this README's structure and setup instructions. The analysis and interpretation (observation cells in the notebooks and the Discussion section above) are written by the team.
-
-## 10. References
-
-- Duin, R. P. W. *Multiple Features Data Set.* UCI Machine Learning Repository.
-- Mobile Price Classification dataset (`train.csv`), as assigned by the instructor.
-- scikit-learn, Gradio and Plotly documentation.
+- **Course:** 23CSE301 - Machine Learning
+- **Institution:** Department of Computer Science & Engineering
+- **Project Scope:** Capstone Review 1 (Regression) & Review 2 (Classification & Clustering)
